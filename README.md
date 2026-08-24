@@ -2,7 +2,7 @@
 
 LeapDroid is being rewritten as a native WSA-like Android subsystem for Apple Silicon Macs. The new generation targets macOS 14+ on ARM64, with separate Android Desktop and Android TV editions and shared runtime/protocol contracts with Trinity for Windows.
 
-> **Current status:** architecture and repository reset. The complete historical LeapGL implementation is preserved on the [`legacy`](https://github.com/LamPPKK/leapdroid/tree/legacy) branch. The `master` branch is the clean foundation for the macOS ARM64 rewrite and is not yet runnable.
+> **Current status:** architecture and repository reset. The complete historical LeapGL implementation is preserved on the [`legacy`](https://github.com/LamPPKK/leapdroid/tree/legacy) branch. The `main` branch is the clean foundation for the macOS ARM64 rewrite and is not yet runnable.
 
 The canonical joint plan is maintained in Trinity: [Trinity and LeapDroid Development Plan](https://github.com/LamPPKK/TrinityEmulator/tree/main/docs/devel/trinity-leapdroid-development-plan).
 
@@ -15,7 +15,7 @@ The canonical joint plan is maintained in Trinity: [Trinity and LeapDroid Develo
 
 ## Development checklist
 
-Checkboxes describe implementation and release status on `master`. An item is checked only after its phase exit criteria and tests pass.
+Checkboxes describe implementation and release status on `main`. An item is checked only after its phase exit criteria and tests pass.
 
 ### Repository and native foundation
 
@@ -33,8 +33,13 @@ Checkboxes describe implementation and release status on `master`. An item is ch
 - [ ] Implement the versioned shared control, presentation, input, clipboard, notification, surface, and bulk-data protocols.
 - [ ] Boot the shared current AOSP/GKI arm64 Desktop and Android TV products.
 - [ ] Implement lifecycle, suspend/resume, snapshots, storage quotas, multi-instance support, APK management, deep links, and opt-in ADB.
-- [ ] Do not bundle GApps, Google Play Store, Google Play Services, or other proprietary Google system packages.
-- [ ] Preinstall verified F-Droid and add an independently controlled, opt-in microG compatibility profile.
+- [ ] Implement exactly three immutable service modes: `NoApp` (clean AOSP, default), `microG` (verified F-Droid + approved microG), and `GApps` (advanced user import).
+- [ ] Keep GApps, Google Play Store/Services, and other proprietary Google system packages out of source, CI, and release artifacts; never search for or download them, and accept only a compatible package explicitly selected by the user.
+- [ ] Build the GApps importer as a sandboxed, transactional, payload-free provider with validation, sealed read-only add-on storage, rollback, mode isolation, and a permanent uncertified/best-effort label.
+- [ ] Restrict microG signature spoofing to pinned identities and make device registration, Cloud Messaging, location, and network access independently controlled.
+- [ ] Implement independent `RootMode=Off|KernelSU|Magisk`; default to `Off`, build rooted Developer artifacts reproducibly from pinned source, and keep providers mutually exclusive.
+- [ ] Add default-deny root grants, authenticated management, module safe mode, host-owned recovery, update/rollback, and clean-absence tests; provide no concealment or attestation/DRM/banking/anti-cheat bypass features.
+- [ ] Keep Magisk Zygisk off by default and expose KernelSU only when its pinned arm64 kernel integration passes security, boot, update, and compatibility gates.
 - [ ] Maintain CTS, VTS, compatibility, upgrade, and real-application test matrices for both LeapDroid editions.
 
 ### Graphics and native macOS experience
