@@ -34,12 +34,15 @@ Checkboxes describe implementation and release status on `main`. An item is chec
 - [ ] Boot the shared current AOSP/GKI arm64 Desktop and Android TV products.
 - [ ] Implement lifecycle, suspend/resume, snapshots, storage quotas, multi-instance support, APK management, deep links, and opt-in ADB.
 - [ ] Implement exactly three immutable service modes: `NoApp` (clean AOSP, default), `microG` (verified F-Droid + approved microG), and `GApps` (advanced user import).
-- [ ] Keep GApps, Google Play Store/Services, and other proprietary Google system packages out of source, CI, and release artifacts; never search for or download them, and accept only a compatible package explicitly selected by the user.
-- [ ] Build the GApps importer as a sandboxed, transactional, payload-free provider with validation, sealed read-only add-on storage, rollback, mode isolation, and a permanent uncertified/best-effort label.
+- [ ] Keep user-imported GApps, Google Play Store/Services, and other proprietary Google system packages out of public source, CI, and ordinary release artifacts; never search for or download them, and accept only a compatible package explicitly selected by the user. A separate `CertifiedPartner` artifact requires exact written distribution rights.
+- [ ] Build the user-import GApps path as a sandboxed, transactional, payload-free provider with validation, sealed read-only add-on storage, rollback, mode isolation, and a permanent uncertified/best-effort label.
+- [ ] Add a separate `GAppsProviderClass=CertifiedPartner` gate for `RootMode=Off`; ship the certified label/SKU only with written GMS/Play Protect approval, legitimate attestation provisioning, official Play Integrity verification, applicable legacy SafetyNet results, licensed Widevine security level, and a passing regional banking-app blocking matrix.
+- [ ] Keep user-imported GApps permanently uncertified; if certification, attestation, DRM licensing/security level, or banking gates fail on a target, withhold the certified SKU instead of spoofing or bypassing the verifier.
 - [ ] Restrict microG signature spoofing to pinned identities and make device registration, Cloud Messaging, location, and network access independently controlled.
 - [ ] Implement independent `RootMode=Off|KernelSU|Magisk`; default to `Off`, build rooted Developer artifacts reproducibly from pinned source, and keep providers mutually exclusive.
 - [ ] Add default-deny root grants, authenticated management, module safe mode, host-owned recovery, update/rollback, and clean-absence tests; provide no concealment or attestation/DRM/banking/anti-cheat bypass features.
 - [ ] Keep Magisk Zygisk off by default and expose KernelSU only when its pinned arm64 kernel integration passes security, boot, update, and compatibility gates.
+- [ ] Let users import compatible local KernelSU/Magisk module archives through a provider-scoped, sandboxed file picker with validation, risk acknowledgement, snapshot/stopped-instance requirement, enable/disable/remove controls, and host-owned safe-mode recovery; do not bundle or download module payloads.
 - [ ] Maintain CTS, VTS, compatibility, upgrade, and real-application test matrices for both LeapDroid editions.
 
 ### Graphics and native macOS experience
